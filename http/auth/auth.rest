@@ -1,0 +1,31 @@
+### Register
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "password123"
+}
+
+### Login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "password123"
+}
+
+### Refresh Token
+POST http://localhost:3000/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "bd786a625743102d19dafe6b309275bec73d8e0983a387142d6920aa05ed6c7fc02fe7e45bbdb076290bd2c0c4fe495efb78720bf519fba406bac09298623b96"
+}
+
+
+### Get me
+GET http://localhost:3000/auth/me
+Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJ1c2VySWQiOiJiMWYwZmRjMy02YTNhLTRhZDYtOTk4Ni03YTM1MGU1NmQ3NzAiLCJ0b2tlblZlcnNpb24iOjAsInBlcm1pc3Npb25zIjpbInVzZXI6cmVhZCIsInVzZXI6dXBkYXRlIiwidXNlcjpkZWxldGUiXSwiaWF0IjoxNzczMTIyOTYxLCJleHAiOjE3NzMxMjM4NjF9.J1Y0hllPvjpDay7d_j8w25YGInAmJnyflIGtp7XZqvf-G14F58VPPoNUUDaF7p6IQheo4q4Q_Nl9gNkdA302_hJgycbb7LoDeIPOZ51-a1aWV6o9LIBfl1daJMQhdh94RO2nirWd5orHqYm4duVNtobqHR1tZ-89ZtDYu0ABxWNyVMfmBZd7z2oelQkm5fr2-fhD9EbUJc2oDJSp148jf5hpXL9wlL5v6mW4KJiGXlT5O0uIiytVD6qN_Drn8Y-A1_lq9-0T9tRc4atfi5fjxKKVXJZYavpqA_UcUE1fWSIkdjbfogh1FtgCe3bNgoPhd8_dPqNACJl8uUwkmRQRUg
+

@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserStatus {
+  ACTIVE
+  LOCKED
+  SUSPENDED
+}
+
+model User {
+  id            String       @id @default(uuid())
+  email         String       @unique
+  password      String
+  status        UserStatus   @default(ACTIVE)
+
+  tokenVersion  Int          @default(0)  // dùng cho global logout
+
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  roles         UserRole[]
+  sessions      RefreshToken[]
+
+  @@index([email])
+}
+
+model Role {
+  id          String          @id @default(uuid())
+  name        String          @unique
+  description String?
+
+  createdAt   DateTime        @default(now())
+
+  users       UserRole[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  id          String          @id @default(uuid())
+  name        String          @unique   // ví dụ: user.create
+  description String?
+
+  createdAt   DateTime        @default(now())
+
+  roles       RolePermission[]
+}
+
+model UserRole {
+  userId  String
+  roleId  String
+
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role    Role  @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  assignedAt DateTime @default(now())
+
+  @@id([userId, roleId])
+  @@index([roleId])
+}
+
+model RolePermission {
+  roleId        String
+  permissionId  String
+
+  role          Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission    Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@index([permissionId])
+}
+
+model RefreshToken {
+  id          String   @id @default(uuid())
+  userId      String
+  tokenHash   String   @unique
+  deviceId    String?
+  expiresAt   DateTime
+  revoked     Boolean  @default(false)
+
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}

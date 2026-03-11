@@ -1,0 +1,73 @@
+import { userRepository } from "../../repository/user.repository.js";
+import { signAccessToken } from "../../utils/jwt.js";
+import { hashPassword, verifyPassword } from "../../utils/password.js";
+import { signRefreshToken } from "../../utils/refreshToken.js";
+
+export const login = async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
+
+        const user = await userRepository.findByEmail(email);
+
+        if (!user) {
+            return res.status(401).json({ error: "Invalid email or password" });
+        }
+
+        const isValid = await verifyPassword(user.password, password);
+
+        if (!isValid) {
+            return res.status(401).json({ error: "Invalid email or password" });
+        }
+
+        // const getRole = await userRepository.getUserRole(user.id)
+        
+        const acessToken = await signAccessToken({
+            userId: user.id,
+            tokenVersion: user.tokenVersion,
+            // roles: getRole
+        })
+
+        const userId = user.id;
+        const deviceId = req.headers['user-agent'] || 'unknown';
+        const refreshToken = await signRefreshToken(userId, deviceId);
+
+        res.status(200).json({ message: "Login successful", accessToken: acessToken, refreshToken });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const register = async (req, res, next) => {
+    try {
+        const { email, username, password } = req.body;
+
+        const existingUser = await userRepository.findByEmail(email);
+
+        if (existingUser) {
+            return res.status(409).json({ error: "Email already exists" });
+        }
+
+        const hashedPassword = await hashPassword(password);
+
+        await userRepository.create({ email, username, password: hashedPassword });
+
+        res.status(201).json({ message: "User registered successfully" });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getProfile = async (req, res, next) => {
+    try {
+        const userId = req.user.userId;
+        const user = await userRepository.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.status(200).json({ email: user.email, status: user.status });
+    } catch (error) {
+        next(error);
+    }
+}
