@@ -93,23 +93,28 @@ async function main() {
     data: [
       { name: "user:read" },
       { name: "user:update" },
-      { name: "user:delete" }
+      { name: "user:delete" },
+      { name: "*"}
     ],
     skipDuplicates: true
   })
 
+  // asign role admin to all permissions
   const adminRole = await prisma.role.findUnique({
     where: { name: "admin" },
     select: { id: true }
   })
 
-  const permissions = await prisma.permission.findMany()
-
-  await prisma.rolePermission.createMany({
-    data: permissions.map((p: any) => ({
+  const permissionFullAccess = await prisma.permission.findUnique({
+    where: { name: "*" },
+    select: { id: true }
+  })
+  
+  await prisma.rolePermission.create({
+    data: {
       roleId: adminRole!.id,
-      permissionId: p.id
-    }))
+      permissionId: permissionFullAccess!.id
+    }
   })
 
   const adminUser = await prisma.user.findUnique({
