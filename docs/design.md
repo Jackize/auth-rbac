@@ -53,11 +53,13 @@ Primary objective:
 Algorithm: Argon2id
 
 Properties:
+
 - Memory hard
 - Resistant to GPU cracking
 - Automatic salt generation
 
 Rules:
+
 - Minimum length: 8–12 characters
 - Optional complexity enforcement
 - Password never logged
@@ -70,11 +72,13 @@ Rules:
 Algorithm: RS256 (asymmetric)
 
 Why RS256:
+
 - Separation of signing & verification
 - Microservice-ready
 - Supports key rotation
 
 Access Token:
+
 - Expiration: 10–15 minutes
 - Contains:
   - userId
@@ -92,6 +96,7 @@ Access token is stateless.
 Refresh token is stateful.
 
 Properties:
+
 - Random 64 bytes
 - Hashed before storing in DB
 - Stored with:
@@ -101,10 +106,12 @@ Properties:
   - revoked flag
 
 Rotation enforced:
+
 - Old refresh token invalidated on use
 - New refresh token issued
 
 Prevents:
+
 - Token replay
 - Stolen refresh reuse
 
@@ -134,7 +141,6 @@ User → UserRole → Role → RolePermission → Permission
 Permission format:
 resource.action
 example: user.create
-
 
 ### 5.2 Authorization Flow
 
@@ -172,12 +178,14 @@ No hardcoded role checks.
 All input validated using schema validation (e.g., Zod).
 
 Rules:
+
 - Email format validation
 - Password length enforcement
 - Reject unknown fields
 - Body size limit (10kb)
 
 Prevents:
+
 - Injection attempts
 - Payload flooding
 
@@ -203,6 +211,7 @@ HTTPS required in production.
 Structured logs (Pino).
 
 Log:
+
 - Login attempts
 - Failed login
 - Token refresh
@@ -211,6 +220,7 @@ Log:
 - Account lock
 
 Never log:
+
 - Password
 - Raw token
 - Secret keys
@@ -220,6 +230,7 @@ Never log:
 ### 9.2 Metrics
 
 Track:
+
 - Login failure rate
 - Token refresh frequency
 - 401 / 403 rate
@@ -230,13 +241,16 @@ Track:
 ## 10. Key Management
 
 Private key:
+
 - Stored in secure environment variable or secret manager
 - Never committed to repo
 
 Public key:
+
 - Exposed for verification (if microservice architecture)
 
 Key rotation:
+
 - Versioned keys
 - Grace period for old tokens
 
@@ -253,6 +267,7 @@ Key rotation:
 ### 11.2 Refresh Token Reuse Detection
 
 If refresh token reused after rotation:
+
 - Revoke all sessions
 - Force re-login
 

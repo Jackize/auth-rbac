@@ -1,4 +1,11 @@
-import { beforeAll, beforeEach, describe, expect, it, jest } from "@jest/globals";
+import {
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from "@jest/globals";
 import request from "supertest";
 
 // -----------------------------------------------------------------------------
@@ -41,8 +48,8 @@ jest.unstable_mockModule("../src/repository/refreshToken.repository.js", () => {
     return record;
   });
 
-  const findByToken = jest.fn(async (token) =>
-    _tokens.find((t) => t.tokenHash === token) || null
+  const findByToken = jest.fn(
+    async (token) => _tokens.find((t) => t.tokenHash === token) || null,
   );
 
   const revokeTokenByToken = jest.fn(async (token) => {
@@ -58,8 +65,8 @@ jest.unstable_mockModule("../src/repository/refreshToken.repository.js", () => {
 
   const findActiveTokensByUserId = jest.fn(async (userId) =>
     _tokens.filter(
-      (t) => t.userId === userId && !t.revoked && t.expiresAt > new Date()
-    )
+      (t) => t.userId === userId && !t.revoked && t.expiresAt > new Date(),
+    ),
   );
 
   const deleteByToken = jest.fn(async (token) => {
@@ -102,7 +109,8 @@ beforeAll(async () => {
   invalidateRefreshTokens = refreshTokenUtil.invalidateRefreshTokens;
   ({ createApp } = await import("../src/app.js"));
 
-  const refreshMod = await import("../src/repository/refreshToken.repository.js");
+  const refreshMod =
+    await import("../src/repository/refreshToken.repository.js");
   refreshTokenRepositoryMock = refreshMod.refreshTokenRepository;
 
   const userMod = await import("../src/repository/user.repository.js");
@@ -127,9 +135,7 @@ describe("Refresh validation", () => {
   });
 
   it("returns 400 when refreshToken is missing on POST /auth/refresh-token", async () => {
-    const res = await request(app)
-      .post("/auth/refresh-token")
-      .send({});
+    const res = await request(app).post("/auth/refresh-token").send({});
 
     expect(res.status).toBe(400);
     expect(res.body.error).toMatch(/invalid input/i);
@@ -175,7 +181,7 @@ describe("generateRefreshToken (controller)", () => {
 
   it("returns 401 when refresh token is invalid (not in DB)", async () => {
     refreshTokenRepositoryMock.findByToken.mockImplementationOnce(
-      async () => null
+      async () => null,
     );
     const res = await request(app)
       .post("/auth/refresh-token")
@@ -194,7 +200,7 @@ describe("generateRefreshToken (controller)", () => {
 
     await invalidateRefreshTokens(userId);
     expect(refreshTokenRepositoryMock.deleteByUserId).toHaveBeenCalledWith(
-      userId
+      userId,
     );
     expect(_tokens.some((t) => t.userId === userId)).toBe(false);
 
@@ -207,9 +213,8 @@ describe("generateRefreshToken (controller)", () => {
   });
 
   it("returns 400 when refreshToken missing (controller guard)", async () => {
-    const { generateRefreshToken } = await import(
-      "../src/modules/refresh/refresh.controller.js"
-    );
+    const { generateRefreshToken } =
+      await import("../src/modules/refresh/refresh.controller.js");
     const req = { body: {} };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
     const next = jest.fn();
@@ -219,7 +224,6 @@ describe("generateRefreshToken (controller)", () => {
       error: "Refresh token missing",
     });
   });
-
 
   it("returns 404 when user not found", async () => {
     findByIdMock.mockResolvedValueOnce(null);
@@ -261,7 +265,9 @@ describe("generateRefreshToken (controller)", () => {
       .send({ refreshToken: oldToken });
     expect(second.status).toBe(401);
     expect(second.body.error).toBe("Refresh token revoked");
-    expect(refreshTokenRepositoryMock.revokeTokensByUserId).toHaveBeenCalledWith(userId);
+    expect(
+      refreshTokenRepositoryMock.revokeTokensByUserId,
+    ).toHaveBeenCalledWith(userId);
   });
 
   it("calls next(error) when findById throws", async () => {
@@ -294,14 +300,14 @@ describe("getActiveRefreshTokens (controller) and GET /refresh/active (route)", 
 
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
-    expect(refreshTokenRepositoryMock.findActiveTokensByUserId).toHaveBeenCalledWith(
-      "test-user-id"
-    );
+    expect(
+      refreshTokenRepositoryMock.findActiveTokensByUserId,
+    ).toHaveBeenCalledWith("test-user-id");
   });
 
   it("calls next(error) when findActiveTokensByUserId throws", async () => {
     refreshTokenRepositoryMock.findActiveTokensByUserId.mockRejectedValueOnce(
-      new Error("DB error")
+      new Error("DB error"),
     );
     const res = await request(app)
       .get("/refresh/active")
@@ -322,9 +328,8 @@ describe("revokeRefreshToken (controller)", () => {
   });
 
   it("returns 400 when refreshToken missing (controller guard)", async () => {
-    const { revokeRefreshToken } = await import(
-      "../src/modules/refresh/refresh.controller.js"
-    );
+    const { revokeRefreshToken } =
+      await import("../src/modules/refresh/refresh.controller.js");
     const req = { body: {} };
     const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
     const next = jest.fn();
@@ -354,7 +359,7 @@ describe("revokeRefreshToken (controller)", () => {
 
   it("calls next(error) when revokeTokenByToken throws", async () => {
     refreshTokenRepositoryMock.revokeTokenByToken.mockRejectedValueOnce(
-      new Error("DB error")
+      new Error("DB error"),
     );
     const token = await signRefreshToken("user-x", "device");
     const res = await request(app)
@@ -382,17 +387,17 @@ describe("revokeAllRefreshTokens (controller) and POST /auth/logout-all (route)"
 
     expect(res.status).toBe(200);
     expect(res.body.message).toBe("All refresh tokens revoked successfully");
-    expect(refreshTokenRepositoryMock.revokeTokensByUserId).toHaveBeenCalledWith(
-      "test-user-id"
-    );
+    expect(
+      refreshTokenRepositoryMock.revokeTokensByUserId,
+    ).toHaveBeenCalledWith("test-user-id");
     expect(userRepositoryMock.incrementTokenVersion).toHaveBeenCalledWith(
-      "test-user-id"
+      "test-user-id",
     );
   });
 
   it("calls next(error) when revokeTokensByUserId throws", async () => {
     refreshTokenRepositoryMock.revokeTokensByUserId.mockRejectedValueOnce(
-      new Error("DB error")
+      new Error("DB error"),
     );
     const res = await request(app)
       .post("/auth/logout-all")

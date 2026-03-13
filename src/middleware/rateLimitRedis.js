@@ -18,7 +18,13 @@ const LUA_INCR_EXPIRE = `
  * @param {{ errorMessage: string }} options - errorMessage cho body 429
  * @returns {Promise<boolean>} true nếu cho phép, false nếu đã gửi 429/503
  */
-export async function checkRateLimit(key, maxAttempts, windowSeconds, res, options = {}) {
+export async function checkRateLimit(
+  key,
+  maxAttempts,
+  windowSeconds,
+  res,
+  options = {},
+) {
   const { errorMessage = "Too many requests" } = options;
 
   let redis;
@@ -30,7 +36,12 @@ export async function checkRateLimit(key, maxAttempts, windowSeconds, res, optio
   }
 
   try {
-    const count = await redis.eval(LUA_INCR_EXPIRE, 1, key, String(windowSeconds));
+    const count = await redis.eval(
+      LUA_INCR_EXPIRE,
+      1,
+      key,
+      String(windowSeconds),
+    );
     const n = Number(count);
     const remaining = Math.max(0, maxAttempts - n);
 

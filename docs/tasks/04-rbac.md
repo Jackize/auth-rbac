@@ -1,6 +1,7 @@
 # Milestone 4 – RBAC
 
 ## Goal
+
 Dynamic permission-based authorization.
 
 ---
@@ -8,6 +9,7 @@ Dynamic permission-based authorization.
 ## Tasks
 
 ### DB
+
 [✅] Role model
 [✅] Permission model
 [✅] RolePermission mapping
@@ -16,6 +18,7 @@ Dynamic permission-based authorization.
 ---
 
 ### Middleware
+
 [✅] requirePermission()
 [✅] 403 when lacking permission
 

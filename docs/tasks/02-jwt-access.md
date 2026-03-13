@@ -1,6 +1,7 @@
 # Milestone 2 – JWT Access Control
 
 ## Goal
+
 Protect route using RS256 access token.
 
 ---
@@ -8,6 +9,7 @@ Protect route using RS256 access token.
 ## Tasks
 
 ### Key Management
+
 [✅] Generate RSA key pair
 [✅] Store private key securely
 [✅] Export public key
@@ -15,6 +17,7 @@ Protect route using RS256 access token.
 ---
 
 ### JWT
+
 [✅] signAccessToken()
 [✅] verifyAccessToken()
 [✅] tokenVersion included
@@ -23,6 +26,7 @@ Protect route using RS256 access token.
 ---
 
 ### Middleware
+
 [✅] verifyJWT middleware
 [✅] Protect /protected route
 

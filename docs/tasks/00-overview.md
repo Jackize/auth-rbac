@@ -4,6 +4,7 @@ Goal:
 Build a production-grade authentication & authorization service.
 
 Tech:
+
 - Express (JS)
 - PostgreSQL
 - Prisma
@@ -22,6 +23,7 @@ Milestones:
 7. Audit & Threat Testing
 
 Completion Criteria:
+
 - All checklist items implemented
 - No critical vulnerability
 - Threat model validated

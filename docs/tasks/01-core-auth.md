@@ -1,6 +1,7 @@
 # Milestone 1 – Core Authentication
 
 ## Goal
+
 User can register & login securely.
 
 ---
@@ -8,6 +9,7 @@ User can register & login securely.
 ## Tasks
 
 ### Setup
+
 [✅] Express base
 [✅] Prisma connected
 [✅] PostgreSQL running
@@ -17,6 +19,7 @@ User can register & login securely.
 ---
 
 ### Database
+
 [✅] User model created
 [✅] Migrate DB
 [✅] Unique index email
@@ -24,6 +27,7 @@ User can register & login securely.
 ---
 
 ### Password
+
 [✅] hashPassword()
 [✅] verifyPassword()
 [✅] Password policy enforced
@@ -31,6 +35,7 @@ User can register & login securely.
 ---
 
 ### API
+
 [✅] POST /register
 [✅] POST /login
 [✅] 401 on invalid login

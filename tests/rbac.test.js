@@ -21,8 +21,10 @@ let requirePermission;
 let RESOURCE_USER_PERMISSIONS;
 
 beforeAll(async () => {
-  ({ requirePermission } = await import("../src/middleware/require.permission.js"));
-  ({ RESOURCE_USER_PERMISSIONS } = await import("../src/permissions/user.permission.js"));
+  ({ requirePermission } =
+    await import("../src/middleware/require.permission.js"));
+  ({ RESOURCE_USER_PERMISSIONS } =
+    await import("../src/permissions/user.permission.js"));
 });
 
 // -----------------------------------------------------------------------------
@@ -34,10 +36,12 @@ const createTestApp = () => {
 
   // fake authorize middleware; we'll always attach a user object but allow
   // the tests to control the granted permissions via the repository mock.
-  const fakeAuthorize = (roles = ["admin"]) => (req, res, next) => {
-    req.user = { userId: "test-user", roles };
-    next();
-  };
+  const fakeAuthorize =
+    (roles = ["admin"]) =>
+    (req, res, next) => {
+      req.user = { userId: "test-user", roles };
+      next();
+    };
 
   // route that exercises the RBAC middleware
   app.get(
@@ -46,7 +50,7 @@ const createTestApp = () => {
     requirePermission(RESOURCE_USER_PERMISSIONS.read),
     (req, res) => {
       return res.status(200).json({ message: "ok" });
-    }
+    },
   );
 
   // simple error handler so that Jest can see exceptions

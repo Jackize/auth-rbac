@@ -1,6 +1,7 @@
 # Milestone 3 – Refresh & Session
 
 ## Goal
+
 Secure session lifecycle with rotation.
 
 ---
@@ -8,6 +9,7 @@ Secure session lifecycle with rotation.
 ## Tasks
 
 ### DB
+
 [✅] RefreshToken table
 [✅] Hash refresh token before storing
 [✅] Add index userId
@@ -15,6 +17,7 @@ Secure session lifecycle with rotation.
 ---
 
 ### Refresh Flow
+
 [✅] POST /refresh
 [✅] Rotate token
 [✅] Revoke old refresh
@@ -22,6 +25,7 @@ Secure session lifecycle with rotation.
 ---
 
 ### Reuse Detection
+
 [✅] Detect reused refresh
 [✅] Revoke all sessions
 [✅] Force re-login
@@ -29,6 +33,7 @@ Secure session lifecycle with rotation.
 ---
 
 ### Logout
+
 [✅] Logout single device
 [✅] Logout all devices (tokenVersion++)
 

@@ -107,4 +107,3 @@ describe("authorize middleware", () => {
     expect(next).not.toHaveBeenCalled();
   });
 });
-

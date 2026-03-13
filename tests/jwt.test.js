@@ -88,7 +88,10 @@ describe("JWT Access Control Tests", () => {
 
           const privateKeyObj = await importPKCS8(privateKey, "RS256");
 
-          const token = await new SignJWT({ userId: "test-user", tokenVersion: 1 })
+          const token = await new SignJWT({
+            userId: "test-user",
+            tokenVersion: 1,
+          })
             .setProtectedHeader({ alg: "RS256" })
             .setIssuedAt()
             .setExpirationTime("0s") // Immediate expiration
@@ -124,9 +127,8 @@ describe("JWT Access Control Tests", () => {
       const parts = validToken.split(".");
       if (parts.length === 3) {
         // Corrupt the signature (last part)
-        const modifiedSignature = Buffer.from("invalid-signature").toString(
-          "base64"
-        );
+        const modifiedSignature =
+          Buffer.from("invalid-signature").toString("base64");
         const modifiedToken = `${parts[0]}.${parts[1]}.${modifiedSignature}`;
 
         const response = await request(app)
@@ -149,7 +151,7 @@ describe("JWT Access Control Tests", () => {
       const parts = validToken.split(".");
       if (parts.length === 3) {
         const modifiedHeader = Buffer.from(
-          JSON.stringify({ alg: "HS256" }) // Change algorithm
+          JSON.stringify({ alg: "HS256" }), // Change algorithm
         ).toString("base64url");
         const modifiedToken = `${modifiedHeader}.${parts[1]}.${parts[2]}`;
 

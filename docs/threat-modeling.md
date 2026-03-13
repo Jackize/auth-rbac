@@ -21,8 +21,8 @@ Architecture: Express + PostgreSQL + Redis + JWT (RS256)
 
 # 2. STRIDE Threat Table
 
-| ID | Category | Threat | Attack Scenario | Impact | Mitigation | Residual Risk |
-|----|----------|--------|----------------|--------|------------|---------------|
+| ID  | Category | Threat | Attack Scenario | Impact | Mitigation | Residual Risk |
+| --- | -------- | ------ | --------------- | ------ | ---------- | ------------- |
 
 | T1 | Spoofing | Credential stuffing | Attacker uses leaked password database | Account takeover | Rate limit login, account lock, strong hashing (Argon2), monitoring login anomalies | Medium |
 
@@ -65,9 +65,11 @@ Architecture: Express + PostgreSQL + Redis + JWT (RS256)
 ## 3.1 Refresh Token Reuse
 
 Risk:
+
 - Attacker uses old refresh token after rotation.
 
 Mitigation:
+
 - Store refresh hash
 - On reuse:
   - Revoke all sessions
@@ -78,9 +80,11 @@ Mitigation:
 ## 3.2 Key Leakage
 
 Risk:
+
 - Private signing key leaked.
 
 Mitigation:
+
 - Secret manager
 - Key rotation policy
 - Short access token lifetime
@@ -91,10 +95,12 @@ Mitigation:
 ## 3.3 Brute Force
 
 Risk:
+
 - Password guessing
 - Argon2 CPU exhaustion
 
 Mitigation:
+
 - Rate limit
 - Exponential backoff
 - Account lock
@@ -104,15 +110,15 @@ Mitigation:
 
 # 4. Attack Surface Summary
 
-| Surface | Exposure Level |
-|---------|---------------|
-| /login | High |
-| /refresh | High |
-| /register | Medium |
-| /protected routes | Medium |
-| RBAC management | High |
-| Database | Critical |
-| Signing keys | Critical |
+| Surface           | Exposure Level |
+| ----------------- | -------------- |
+| /login            | High           |
+| /refresh          | High           |
+| /register         | Medium         |
+| /protected routes | Medium         |
+| RBAC management   | High           |
+| Database          | Critical       |
+| Signing keys      | Critical       |
 
 ---
 
@@ -129,15 +135,18 @@ Mitigation:
 # 6. Residual Risk Analysis
 
 Low Risk:
+
 - JWT tampering
 - SQL injection
 
 Medium Risk:
+
 - Credential stuffing
 - Refresh token theft
 - DoS attempts
 
 Critical Risk (if misconfigured):
+
 - Private key leak
 - DB exposure
 

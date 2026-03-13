@@ -4,12 +4,12 @@
  */
 export const MAX_FAILED_LOGIN_ATTEMPTS = Math.max(
   1,
-  parseInt(process.env.MAX_FAILED_LOGIN_ATTEMPTS || "5", 10) || 5
+  parseInt(process.env.MAX_FAILED_LOGIN_ATTEMPTS || "5", 10) || 5,
 );
 
 export const LOCK_DURATION_MINUTES = Math.max(
   1,
-  parseInt(process.env.LOCK_DURATION_MINUTES || "15", 10) || 15
+  parseInt(process.env.LOCK_DURATION_MINUTES || "15", 10) || 15,
 );
 
 /** Thời điểm lockedUntil khi khóa ngay bây giờ */

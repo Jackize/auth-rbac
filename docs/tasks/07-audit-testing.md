@@ -1,6 +1,7 @@
 # Milestone 7 – Audit & Threat Testing
 
 ## Goal
+
 Validate system against attack scenarios.
 
 ---
@@ -26,6 +27,6 @@ Validate system against attack scenarios.
 
 ## Final Approval
 
-Reviewer: __________
-Date: __________
+Reviewer: ****\_\_****
+Date: ****\_\_****
 Status: APPROVED / REJECTED

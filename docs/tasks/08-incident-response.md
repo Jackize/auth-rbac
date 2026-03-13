@@ -13,6 +13,7 @@ This document describes:
 - Post-Incident Review
 
 Scope:
+
 - JWT compromise
 - Refresh token reuse attack
 - Credential stuffing attack
@@ -27,6 +28,7 @@ Scope:
 ## Severity Levels
 
 ### SEV-1 (Critical)
+
 - Private signing key leaked
 - Database compromised
 - Admin privilege escalation
@@ -37,6 +39,7 @@ Immediate action required.
 ---
 
 ### SEV-2 (High)
+
 - Refresh token reuse detected
 - Credential stuffing attack ongoing
 - Suspicious login spike
@@ -46,6 +49,7 @@ Action required within hours.
 ---
 
 ### SEV-3 (Medium)
+
 - Elevated login failure rate
 - Minor permission misconfiguration
 
@@ -73,6 +77,7 @@ Investigate within 24h.
 ## 3.1 JWT Signing Key Compromise (SEV-1)
 
 ### Detection
+
 - Unauthorized tokens validated successfully
 - Key leak confirmed
 
@@ -101,6 +106,7 @@ Investigate within 24h.
 ## 3.2 Refresh Token Reuse Attack
 
 ### Detection
+
 - Same refresh token used twice after rotation
 
 ### Immediate Actions
@@ -120,6 +126,7 @@ Investigate within 24h.
 ## 3.3 Credential Stuffing Attack
 
 ### Detection
+
 - High login failure rate from multiple IPs
 
 ### Immediate Actions
@@ -139,6 +146,7 @@ Investigate within 24h.
 ## 3.4 Privilege Escalation
 
 ### Detection
+
 - Role change without admin audit log
 - Unauthorized permission usage
 
@@ -159,6 +167,7 @@ Investigate within 24h.
 ## 3.5 Database Compromise
 
 ### Detection
+
 - Unauthorized DB access
 - Data leak detected
 
@@ -226,6 +235,7 @@ Within 48 hours:
 - What improvements required?
 
 Produce:
+
 - Written incident report
 - Security improvement plan
 

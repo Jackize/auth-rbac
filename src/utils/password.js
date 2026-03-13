@@ -11,10 +11,10 @@ async function hashPassword(plainPassword) {
   }
 
   return argon2.hash(plainPassword, {
-    type: argon2.argon2id,   // recommended variant
-    memoryCost: 2 ** 16,     // 64MB
-    timeCost: 3,             // iterations
-    parallelism: 1
+    type: argon2.argon2id, // recommended variant
+    memoryCost: 2 ** 16, // 64MB
+    timeCost: 3, // iterations
+    parallelism: 1,
   });
 }
 

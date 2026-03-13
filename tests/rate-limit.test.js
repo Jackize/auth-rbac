@@ -1,4 +1,11 @@
-import { beforeAll, beforeEach, describe, expect, it, jest } from "@jest/globals";
+import {
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from "@jest/globals";
 import request from "supertest";
 
 // -----------------------------------------------------------------------------
@@ -27,8 +34,8 @@ jest.unstable_mockModule("../src/repository/refreshToken.repository.js", () => {
     _tokens.push(record);
     return record;
   });
-  const findByToken = jest.fn(async (token) =>
-    _tokens.find((t) => t.tokenHash === token) || null
+  const findByToken = jest.fn(
+    async (token) => _tokens.find((t) => t.tokenHash === token) || null,
   );
   const revokeTokenByToken = jest.fn(async (token) => {
     const rec = _tokens.find((t) => t.tokenHash === token);

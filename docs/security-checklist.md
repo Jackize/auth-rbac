@@ -13,7 +13,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] Secrets stored in environment variables or secret manager  
 [ ] No secrets committed to Git repository  
 [ ] TLS enforced (HTTPS only)  
-[ ] HTTP disabled or redirected  
+[ ] HTTP disabled or redirected
 
 ---
 
@@ -24,7 +24,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [✅] Body size limit configured (≤ 10kb recommended)  
 [✅] Error stack traces hidden in production  
 [✅] Graceful shutdown implemented  
-[✅] Process crash logging enabled  
+[✅] Process crash logging enabled
 
 ---
 
@@ -36,7 +36,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [✅] No plain text password stored  
 [✅] Password never logged  
 [✅] Password policy enforced (min length ≥ 8)  
-[ ] Account lock after repeated failed login  
+[ ] Account lock after repeated failed login
 
 ---
 
@@ -45,7 +45,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] Rate limit per IP on login  
 [ ] Brute-force detection implemented  
 [ ] Failed login counter stored  
-[ ] Account lock duration defined  
+[ ] Account lock duration defined
 
 ---
 
@@ -57,7 +57,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [✅] Access token expiration ≤ 15 minutes  
 [✅] No sensitive data inside JWT  
 [✅] tokenVersion included in payload  
-[✅] Signature verified on every request  
+[✅] Signature verified on every request
 
 ---
 
@@ -67,7 +67,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] Public key exposed only if required  
 [ ] Key rotation strategy documented  
 [ ] Old key grace period defined  
-[ ] Key versioning implemented  
+[ ] Key versioning implemented
 
 ---
 
@@ -78,7 +78,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] Refresh token random ≥ 64 bytes  
 [ ] Refresh token hashed before storing  
 [ ] Refresh token never logged  
-[ ] Unique index on token hash  
+[ ] Unique index on token hash
 
 ---
 
@@ -87,7 +87,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] Refresh token rotation enforced  
 [ ] Old refresh invalidated after use  
 [ ] Token reuse detection implemented  
-[ ] Reuse triggers session revoke  
+[ ] Reuse triggers session revoke
 
 ---
 
@@ -95,7 +95,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 
 [ ] Refresh token expiration defined  
 [ ] Expired tokens cleaned by scheduled job  
-[ ] Revoked flag implemented  
+[ ] Revoked flag implemented
 
 ---
 
@@ -104,7 +104,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] Multiple device sessions supported  
 [ ] Global logout increments tokenVersion  
 [ ] Logout revokes refresh token  
-[ ] Session table indexed by userId  
+[ ] Session table indexed by userId
 
 ---
 
@@ -115,7 +115,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] No hardcoded role checks  
 [ ] Permission-based access control  
 [ ] Permissions follow naming convention (resource.action)  
-[ ] Role-permission mapping stored in DB  
+[ ] Role-permission mapping stored in DB
 
 ---
 
@@ -124,7 +124,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] JWT verified before permission check  
 [ ] Permission middleware enforced  
 [ ] 401 used for unauthenticated  
-[ ] 403 used for unauthorized  
+[ ] 403 used for unauthorized
 
 ---
 
@@ -134,7 +134,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] Email format validated  
 [ ] Unknown fields rejected  
 [ ] Query parameters validated  
-[ ] Path parameters validated  
+[ ] Path parameters validated
 
 ---
 
@@ -144,7 +144,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] Refresh endpoint rate-limited  
 [ ] Per-user and per-IP strategies defined  
 [ ] Redis used for distributed rate limit  
-[ ] Rate limit bypass tested  
+[ ] Rate limit bypass tested
 
 ---
 
@@ -154,7 +154,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] Email stored lowercase  
 [ ] Cascade delete for sessions  
 [ ] Prisma query parameterized  
-[ ] No raw SQL without sanitization  
+[ ] No raw SQL without sanitization
 
 ---
 
@@ -167,7 +167,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] Login failure logged  
 [ ] Permission denial logged  
 [ ] Token reuse logged  
-[ ] No sensitive data logged  
+[ ] No sensitive data logged
 
 ---
 
@@ -176,7 +176,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] Alert on high login failure rate  
 [ ] Alert on abnormal refresh frequency  
 [ ] Alert on repeated rate limit hits  
-[ ] 401/403 metrics tracked  
+[ ] 401/403 metrics tracked
 
 ---
 
@@ -187,7 +187,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] Refresh reuse tested  
 [ ] SQL injection attempt tested  
 [ ] XSS header protection tested  
-[ ] Rate limit stress tested  
+[ ] Rate limit stress tested
 
 ---
 
@@ -196,7 +196,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] Database backup enabled  
 [ ] Key backup stored securely  
 [ ] Restore procedure documented  
-[ ] RTO/RPO defined  
+[ ] RTO/RPO defined
 
 ---
 
@@ -206,7 +206,7 @@ Scope: Authentication, Authorization, Session Management, Token Handling
 [ ] Password policy documented  
 [ ] Token expiration policy documented  
 [ ] Access review process defined  
-[ ] Audit logs retained for defined period  
+[ ] Audit logs retained for defined period
 
 ---
 
@@ -218,12 +218,12 @@ Before Production Release:
 [ ] No high/critical vulnerabilities open  
 [ ] Secrets rotated  
 [ ] Test environment isolated  
-[ ] Load test performed  
+[ ] Load test performed
 
 ---
 
 # Security Approval
 
-Reviewer: ___________________  
-Date: _______________________  
+Reviewer: ********\_\_\_********  
+Date: **********\_\_\_**********  
 Status: APPROVED / REJECTED
