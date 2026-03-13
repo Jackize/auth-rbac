@@ -8,23 +8,24 @@ Protect against brute force & DoS.
 ## Tasks
 
 ### Login Rate Limit
-[ ] 5 attempts/minute per IP
-[ ] Lock account after X fails
+[✅] 5 attempts/minute per IP
+[✅] Lock account after X fails
 
 ---
 
 ### Refresh Rate Limit
-[ ] 10 attempts/minute per user
+[✅] 10 attempts/minute per user
 
 ---
 
 ### Redis Keys
-[ ] rate:login:<ip>
-[ ] rate:refresh:<userId>
+[✅] rate:login:<ip>
+[✅] rate:refresh:<userId>
 
 ---
 
 ## Test Cases
 
-[ ] Spam login blocked
-[ ] Account locked after threshold
+[✅] Spam login blocked
+[✅] Account locked after threshold
+[✅] Spam refresh blocked

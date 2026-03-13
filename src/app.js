@@ -10,6 +10,9 @@ import refreshRouter from "./modules/refresh/refresh.route.js";
 export const createApp = () => {
     const app = express();
 
+    // So req.ip reflects client IP when behind reverse proxy (rate limit, logs)
+    app.set("trust proxy", 1);
+
     // ===== Security Headers =====
     app.use(helmet());
 

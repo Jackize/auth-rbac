@@ -1,3 +1,4 @@
+import { enforceRefreshRateLimit } from "../../middleware/rate.limit.refresh.js";
 import { refreshTokenRepository } from '../../repository/refreshToken.repository.js';
 import { userRepository } from "../../repository/user.repository.js";
 import { signAccessToken } from "../../utils/jwt.js";
@@ -10,8 +11,16 @@ export const generateRefreshToken = async (req, res, next) => {
         if (!refreshToken) {
             return res.status(400).json({ error: "Refresh token missing" });
         }
-        // find refresh token in database
+        // find refresh token in database (single verify; rate limit uses same userId)
         const isRefreshTokenValid = await verifyRefreshToken(refreshToken);
+
+        // 10 attempts/minute per user (rate:refresh:<userId>); anon by IP if token unknown
+        const allowed = await enforceRefreshRateLimit(
+            isRefreshTokenValid?.userId ?? null,
+            req,
+            res
+        );
+        if (!allowed) return;
 
         if (isRefreshTokenValid && isRefreshTokenValid.revoked) {
             await refreshTokenRepository.revokeTokensByUserId(isRefreshTokenValid.userId);

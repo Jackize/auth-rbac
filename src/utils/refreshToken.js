@@ -13,13 +13,12 @@ export const invalidateRefreshTokens = async (userId) => {
 
 export const verifyRefreshToken = async (token) => {
     const record = await refreshTokenRepository.findByToken(token);
-    // Check token is revoked
-    if (record && record.revoked) {
+    if (!record) return null;
+    if (record.revoked) {
         return { userId: record.userId, revoked: true };
     }
-    // Check token existence,  expiration
     if (record.expiresAt < new Date()) {
         return null;
     }
-    return record ? { userId: record.userId, revoked: false } : null;
+    return { userId: record.userId, revoked: false };
 }

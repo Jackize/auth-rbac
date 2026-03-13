@@ -1,12 +1,12 @@
-const Redis = require("ioredis");
-const { logger } = require("./logger");
+import dotenv from "dotenv";
+import Redis from "ioredis";
+import { logger } from "./logger.js";
+dotenv.config();
 
-// simple singleton wrapper around a single redis client
-// every module that needs a redis connection should call
-// `getRedis()` so the same underlying instance is reused.
+// singleton – reuse one client across the app
 let client;
 
-function getRedis() {
+export function getRedis() {
   if (!client) {
     const url = process.env.REDIS_URL;
     if (!url) {
@@ -15,7 +15,6 @@ function getRedis() {
 
     client = new Redis(url);
 
-    // optional logging to aid in debugging
     client.on("connect", () => {
       logger.info("Redis connected");
     });
@@ -26,5 +25,3 @@ function getRedis() {
 
   return client;
 }
-
-module.exports = { getRedis };

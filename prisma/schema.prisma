@@ -25,6 +25,12 @@ model User {
   password      String
   status        UserStatus   @default(ACTIVE)
 
+  /// Số lần đăng nhập sai mật khẩu liên tiếp; reset về 0 khi login thành công
+  failedLoginAttempts Int    @default(0)
+
+  /// Hết thời điểm này thì có thể đăng nhập lại (tự mở khóa). null = không khóa tạm hoặc đã mở.
+  lockedUntil   DateTime?
+
   tokenVersion  Int          @default(0)  // dùng cho global logout
 
   createdAt     DateTime     @default(now())
