@@ -46,6 +46,11 @@ jest.unstable_mockModule("../src/utils/refreshToken.js", () => ({
   signRefreshToken: signRefreshTokenMock,
 }));
 
+jest.unstable_mockModule("../src/middleware/metrics.js", () => ({
+  incrementLoginFailure: jest.fn().mockResolvedValue(undefined),
+  incrementLoginSuccess: jest.fn().mockResolvedValue(undefined),
+}));
+
 // ---------------------------------------------------------------------------
 // Dynamic import after mocks
 // ---------------------------------------------------------------------------

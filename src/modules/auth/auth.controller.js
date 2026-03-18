@@ -1,3 +1,4 @@
+import { incrementLoginFailure, incrementLoginSuccess } from "../../middleware/metrics.js";
 import { userRepository } from "../../repository/user.repository.js";
 import { signAccessToken } from "../../utils/jwt.js";
 import { hashPassword, verifyPassword } from "../../utils/password.js";
@@ -21,6 +22,10 @@ export const login = async (req, res, next) => {
         const retryAfterSeconds = Math.ceil(
           (user.lockedUntil.getTime() - Date.now()) / 1000,
         );
+        req.log?.warn(
+          { userId: user.id, event: "account_locked", lockedUntil: user.lockedUntil },
+          "Account locked",
+        );
         return res.status(403).json({
           error:
             "Account temporarily locked due to too many failed login attempts.",
@@ -38,8 +43,17 @@ export const login = async (req, res, next) => {
     const isValid = await verifyPassword(user.password, password);
 
     if (!isValid) {
+      req.log?.warn(
+        { event: "login_failure", reason: "invalid_credentials", ip: req.ip },
+        "Login failed",
+      );
+      incrementLoginFailure().catch(() => {});
       const failResult = await userRepository.recordFailedLogin(user.id);
       if (failResult.locked && failResult.lockedUntil) {
+        req.log?.warn(
+          { userId: user.id, event: "account_locked", lockedUntil: failResult.lockedUntil },
+          "Account locked",
+        );
         return res.status(403).json({
           error:
             "Account temporarily locked due to too many failed login attempts.",
@@ -65,6 +79,9 @@ export const login = async (req, res, next) => {
     const userId = user.id;
     const deviceId = req.headers["user-agent"] || "unknown";
     const refreshToken = await signRefreshToken(userId, deviceId);
+
+    req.log?.info({ userId, event: "login_success" }, "User logged in");
+    incrementLoginSuccess().catch(() => {});
 
     res
       .status(200)

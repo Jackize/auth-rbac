@@ -98,6 +98,7 @@ export const revokeAllRefreshTokens = async (req, res, next) => {
     const userId = req.user.userId;
     await refreshTokenRepository.revokeTokensByUserId(userId);
     await userRepository.incrementTokenVersion(userId);
+    req.log?.info({ userId, event: "logout" }, "User logged out");
     res.json({ message: "All refresh tokens revoked successfully" });
   } catch (error) {
     next(error);
