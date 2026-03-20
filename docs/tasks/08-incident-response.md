@@ -83,23 +83,23 @@ Investigate within 24h.
 
 ### Immediate Actions
 
-[ ] Disable compromised key
-[ ] Rotate signing key
-[ ] Invalidate all active access tokens
-[ ] Increment tokenVersion for all users
-[ ] Force global logout
+[ ] Disable compromised key — manual: remove JWT_PRIVATE_KEY/JWT_PUBLIC_KEY from env + redeploy
+[x] Rotate signing key — supported: set JWT_OLD_PUBLIC_KEY/JWT_OLD_KEY_ID/JWT_OLD_KEY_EXPIRES env vars; verifyAccessToken validates both keys during grace period
+[ ] Invalidate all active access tokens — partial: incrementTokenVersion is per-user only; no bulk endpoint exists
+[ ] Increment tokenVersion for all users — not implemented: would need a DB migration or admin endpoint
+[ ] Force global logout — not implemented: revokeAllRefreshTokens is per-user only (POST /auth/logout-all)
 
 ### Recovery
 
-[ ] Deploy new key pair
-[ ] Reissue tokens
-[ ] Audit logs for misuse
+[x] Deploy new key pair — supported: env-based key rotation; old key honored for oldKeyExpiry grace period, then discarded
+[x] Reissue tokens — automatic: users re-authenticate with new key pair after grace period
+[ ] Audit logs for misuse — partial: pino logs login/logout events but no dedicated security audit log query
 
 ### Post-Incident
 
-[ ] Root cause analysis
-[ ] Patch secret storage
-[ ] Update key rotation frequency
+[ ] Root cause analysis — manual process
+[ ] Patch secret storage — manual process
+[ ] Update key rotation frequency — manual process (policy change)
 
 ---
 
@@ -111,15 +111,15 @@ Investigate within 24h.
 
 ### Immediate Actions
 
-[ ] Revoke all sessions of affected user
-[ ] Invalidate all refresh tokens for that user
-[ ] Force password reset (optional)
+[x] Revoke all sessions of affected user — automatic: generateRefreshToken calls revokeTokensByUserId when a revoked token is reused (theft detection in refresh.controller.js)
+[x] Invalidate all refresh tokens for that user — automatic: same revokeTokensByUserId call covers all refresh tokens for the user
+[ ] Force password reset (optional) — not implemented: no password reset endpoint exists
 
 ### Investigation
 
-[ ] Check IP addresses
-[ ] Check deviceId mismatch
-[ ] Check suspicious login history
+[ ] Check IP addresses — not implemented: IP not stored per token; only available in pino request logs
+[ ] Check deviceId mismatch — partial: deviceId stored on RefreshToken record but no comparison logic implemented
+[ ] Check suspicious login history — not implemented: no login history query endpoint
 
 ---
 
@@ -131,15 +131,15 @@ Investigate within 24h.
 
 ### Immediate Actions
 
-[ ] Enable strict rate limiting
-[ ] Temporarily lock affected accounts
-[ ] Enable IP blocklist
-[ ] Consider CAPTCHA
+[x] Enable strict rate limiting — implemented: 5 attempts/min per IP on POST /auth/login via Redis sliding window (rate.limit.login.js)
+[x] Temporarily lock affected accounts — implemented: LOCKED status set automatically after MAX_FAILED_LOGIN_ATTEMPTS failures; auto-unlocks after LOCK_DURATION_MINUTES
+[ ] Enable IP blocklist — not implemented: no IP blocklist mechanism
+[ ] Consider CAPTCHA — not implemented
 
 ### Recovery
 
-[ ] Monitor for successful compromise
-[ ] Notify affected users
+[ ] Monitor for successful compromise — partial: metrics track login_failures_1h and login_success_1h via GET /metrics but no alerting
+[ ] Notify affected users — not implemented: no email/notification system
 
 ---
 
@@ -152,15 +152,15 @@ Investigate within 24h.
 
 ### Immediate Actions
 
-[ ] Revoke admin sessions
-[ ] Lock affected accounts
-[ ] Audit role-permission mapping
+[ ] Revoke admin sessions — partial: POST /auth/logout-all revokes per-user but no bulk admin session revoke
+[x] Lock affected accounts — implemented: status field supports LOCKED; recordFailedLogin sets it; can be set directly in DB
+[ ] Audit role-permission mapping — not implemented: no audit log for RBAC changes
 
 ### Investigation
 
-[ ] Review RBAC change logs
-[ ] Inspect DB integrity
-[ ] Verify API logs
+[ ] Review RBAC change logs — not implemented: no RBAC change audit trail
+[ ] Inspect DB integrity — manual: no automated integrity check
+[x] Verify API logs — implemented: pino logs all auth events (login_success, login_failure, account_locked, logout) with userId and IP
 
 ---
 
@@ -173,16 +173,16 @@ Investigate within 24h.
 
 ### Immediate Actions
 
-[ ] Rotate DB credentials
-[ ] Rotate signing keys
-[ ] Invalidate all sessions
-[ ] Enable read-only mode if needed
+[ ] Rotate DB credentials — manual: update DATABASE_URL env var + redeploy
+[x] Rotate signing keys — implemented: env-based key rotation with grace period (JWT_OLD_PUBLIC_KEY + JWT_OLD_KEY_EXPIRES)
+[ ] Invalidate all sessions — partial: per-user via logout-all; no bulk revocation across all users
+[ ] Enable read-only mode if needed — not implemented
 
 ### Recovery
 
-[ ] Restore from backup (if corrupted)
-[ ] Audit data integrity
-[ ] Notify stakeholders
+[ ] Restore from backup (if corrupted) — manual: infrastructure-level operation
+[ ] Audit data integrity — manual: no automated integrity check
+[ ] Notify stakeholders — manual: no automated notification
 
 ---
 
@@ -190,10 +190,10 @@ Investigate within 24h.
 
 For any incident:
 
-[ ] Isolate affected component
-[ ] Stop further damage
-[ ] Preserve logs
-[ ] Do not delete evidence
+[ ] Isolate affected component — manual: infrastructure-level (reverse proxy, firewall rules)
+[ ] Stop further damage — partial: rate limiting + account lockout limit blast radius automatically
+[x] Preserve logs — implemented: pino structured logging (stdout); Redis metrics with 1h TTL window
+[ ] Do not delete evidence — policy, not code
 
 ---
 
@@ -215,11 +215,11 @@ For any incident:
 
 # 6. Recovery Checklist
 
-[ ] Vulnerability patched
-[ ] Keys rotated
-[ ] Sessions revoked
-[ ] System redeployed
-[ ] Monitoring active
+[ ] Vulnerability patched — manual: code fix + PR review
+[x] Keys rotated — implemented: env-based rotation with backward-compatible grace period
+[ ] Sessions revoked — partial: per-user only; no global bulk revocation
+[ ] System redeployed — manual: CI/CD pipeline
+[x] Monitoring active — implemented: GET /metrics (requires metrics:read permission) exposes login_failures_1h, http_401_1h, http_403_1h
 
 ---
 
@@ -264,11 +264,11 @@ Produce:
 
 Before Production:
 
-[ ] Monitoring configured
-[ ] Alerts tested
-[ ] Key rotation documented
-[ ] Backup restore tested
-[ ] On-call escalation defined
+[x] Monitoring configured — implemented: metricsMiddleware tracks 401/403 counts; login success/failure tracked in Redis with 1h TTL
+[ ] Alerts tested — not implemented: no alerting system (no thresholds, no notifications)
+[x] Key rotation documented — implemented: JWT_OLD_PUBLIC_KEY, JWT_OLD_KEY_ID, JWT_OLD_KEY_EXPIRES documented in CLAUDE.md
+[ ] Backup restore tested — manual: infrastructure-level
+[ ] On-call escalation defined — manual: organizational process
 
 ---
 
